@@ -1,2 +1,5 @@
 import("./style/main.css");
-import "./script/index";
+import ThreeCity from "./script/index";
+
+let threeCity = new ThreeCity();
+threeCity.init();
