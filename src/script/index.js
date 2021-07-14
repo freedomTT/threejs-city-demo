@@ -1,6 +1,8 @@
 "use strict";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class ThreeCity {
   constructor() {
@@ -15,8 +17,10 @@ export default class ThreeCity {
     this.createCamera(true);
     this.createRenderer();
     this.setControl();
+    this.setLight();
     // 加载内容
     this.makeGround();
+    this.loadEvnModel();
   }
   /**
    * @desc 创建相机
@@ -25,8 +29,8 @@ export default class ThreeCity {
     this.camera = new THREE.PerspectiveCamera(
       10,
       window.innerWidth / window.innerHeight,
-      0.01,
-      1000
+      1,
+      2000
     );
 
     this.camera.position.x = 0;
@@ -53,6 +57,7 @@ export default class ThreeCity {
    * */
   createRenderer() {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    // this.renderer.setPixelRatio(window.devicePixelRatio * 1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setAnimationLoop(this.animation.bind(this));
     document.body.appendChild(this.renderer.domElement);
@@ -63,6 +68,22 @@ export default class ThreeCity {
       this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
     window.addEventListener("resize", onWindowResize.bind(this), false);
+  }
+  /**
+   * @desc 添加基础灯光
+   * */
+
+  setLight() {
+    let light = new THREE.AmbientLight("#8b8b8b");
+    this.scene.add(light);
+
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.x = 10;
+    directionalLight.position.y = 10;
+    directionalLight.position.z = 10;
+    this.scene.add(directionalLight);
+    let helper = new THREE.DirectionalLightHelper(directionalLight, 5);
+    this.scene.add(helper);
   }
   /**
    * @desc 动画
@@ -99,5 +120,30 @@ export default class ThreeCity {
     ground.position.z = -1;
     this.scene.add(ground);
     ground.receiveShadow = true;
+  }
+  /**
+   * @desc 加载环境模型
+   * */
+  loadEvnModel() {
+    this.objGroup = new THREE.Group(); // 组
+    this.scene.add(this.objGroup);
+    let loader = new FBXLoader();
+    const color = new THREE.Color("#616161");
+    loader.load("/model/cd.fbx", (object) => {
+      object.rotation.x = Math.PI / 2;
+      object.scale.set(0.0001, 0.0001, 0.0001);
+      object.traverse(function (child) {
+        if (child.isMesh) {
+          child.material.transparent = true;
+          child.material.opacity = 0.5;
+          child.material.color = color;
+          child.castShadow = true;
+        }
+      });
+      this.objGroup.add(object);
+
+      this.objGroup.position.x = 0;
+      this.objGroup.position.y = 0; 
+    });
   }
 }
