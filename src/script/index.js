@@ -59,6 +59,7 @@ export default class ThreeCity {
    * */
   createRenderer() {
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer.shadowMap.enabled = true;
     this.renderer.setPixelRatio(window.devicePixelRatio * 1);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setAnimationLoop(this.animation.bind(this));
@@ -92,14 +93,17 @@ export default class ThreeCity {
       directionalLight.position.x = x;
       directionalLight.position.y = y;
       directionalLight.position.z = z;
+      directionalLight.castShadow = true;
+      directionalLight.target.position.set(1000, 1000, 1000);
       this.scene.add(directionalLight);
       let helper1 = new THREE.DirectionalLightHelper(directionalLight, 50);
       this.scene.add(helper1);
     };
-    addDirectionLight(-200, 100, 200, 0x0000ff); // 左边
+    addDirectionLight(-200, 200, 200, 0xffffff); // 左边
 
     // const pointLight = new THREE.PointLight(0xffffff, 1, 5000);
     // pointLight.position.set(-500, 1000, -500);
+    // pointLight.castShadow = true;
     // this.scene.add(pointLight);
 
     // const sphereSize = 10;
@@ -139,24 +143,33 @@ export default class ThreeCity {
     texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(1, 1);
 
-    const material = new THREE.MeshStandardMaterial({
-      bumpMap: texture,
-      flatShading: true,
-      color: 0x000000,
-      roughness: 0.5,
-      metalness: 0,
+    const material = new THREE.MeshPhongMaterial({
+      // bumpMap: texture,
+      // flatShading: true,
+      color: 0x999999,
+      shininess: 30,
     });
     const ground = new THREE.Mesh(geometry, material);
     ground.position.x = 0;
     ground.position.y = 0;
     ground.position.z = 5;
     ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
     this.scene.add(ground);
   }
   /**
    * @desc 加载环境模型
    * */
   loadEvnModel() {
+    const obj = new THREE.Mesh(
+      new THREE.BoxGeometry(100, 100, 100),
+      new THREE.MeshPhongMaterial({ color: "#8AC" })
+    );
+    obj.castShadow = true;
+    obj.receiveShadow = true;
+    obj.position.y = 100;
+    this.scene.add(obj);
+
     this.objGroup = new THREE.Group(); // 组
     this.scene.add(this.objGroup);
     let loader = new GLTFLoader();
@@ -166,7 +179,6 @@ export default class ThreeCity {
 
       object.traverse((child) => {
         if (child.isMesh) {
-          child.castShadow = true;
           if (child.name === "Areas") {
             let tubeMaterial = new THREE.MeshPhongMaterial({
               transparent: true,
@@ -176,6 +188,8 @@ export default class ThreeCity {
               shininess: 75,
               // emissive: "#280a52",
             });
+            child.castShadow = true;
+            child.receiveShadow = true;
             child.material = tubeMaterial;
           }
           if (child.name === "Router") {
