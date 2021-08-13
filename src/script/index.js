@@ -101,10 +101,10 @@ export default class ThreeCity {
     };
     addDirectionLight(-200, 200, 200, 0xffffff); // 左边
 
-    // const pointLight = new THREE.PointLight(0xffffff, 1, 5000);
-    // pointLight.position.set(-500, 1000, -500);
-    // pointLight.castShadow = true;
-    // this.scene.add(pointLight);
+    const pointLight = new THREE.PointLight(0xffffff, 1, 5000);
+    pointLight.position.set(-500, 1000, -500);
+    pointLight.castShadow = true;
+    this.scene.add(pointLight);
 
     // const sphereSize = 10;
     // const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
@@ -146,7 +146,7 @@ export default class ThreeCity {
     const material = new THREE.MeshPhongMaterial({
       // bumpMap: texture,
       // flatShading: true,
-      color: 0x999999,
+      color: 0x000000,
       shininess: 30,
     });
     const ground = new THREE.Mesh(geometry, material);
@@ -161,14 +161,14 @@ export default class ThreeCity {
    * @desc 加载环境模型
    * */
   loadEvnModel() {
-    const obj = new THREE.Mesh(
-      new THREE.BoxGeometry(100, 100, 100),
-      new THREE.MeshPhongMaterial({ color: "#8AC" })
-    );
-    obj.castShadow = true;
-    obj.receiveShadow = true;
-    obj.position.y = 100;
-    this.scene.add(obj);
+    // const obj = new THREE.Mesh(
+    //   new THREE.BoxGeometry(100, 100, 100),
+    //   new THREE.MeshPhongMaterial({ color: "#8AC" })
+    // );
+    // obj.castShadow = true;
+    // obj.receiveShadow = true;
+    // obj.position.y = 100;
+    // this.scene.add(obj);
 
     this.objGroup = new THREE.Group(); // 组
     this.scene.add(this.objGroup);
