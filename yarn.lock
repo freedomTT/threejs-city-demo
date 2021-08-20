@@ -894,6 +894,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@tweenjs/tween.js@18":
+  version "18.6.4"
+  resolved "https://registry.nlark.com/@tweenjs/tween.js/download/@tweenjs/tween.js-18.6.4.tgz#40a3d0a93647124872dec8e0fd1bd5926695b6ca"
+  integrity sha1-QKPQqTZHEkhy3sjg/RvVkmaVtso=
+
 "@types/eslint-scope@^3.7.0":
   version "3.7.1"
   resolved "https://registry.nlark.com/@types/eslint-scope/download/@types/eslint-scope-3.7.1.tgz#8dc390a7b4f9dd9f1284629efce982e41612116e"

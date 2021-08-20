@@ -25,6 +25,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "18",
     "reset-css": "^5.0.1",
     "three": "^0.130.1"
   }
